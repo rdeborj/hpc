@@ -48,8 +48,8 @@ class Sge:
 		DESCRIPTION
 		"""
 		with open(output, 'w') as f:
-			shell_script = render_template(template_filename, context)
-			f.write(output)
+			shell_script = self.render_template(template_filename, context)
+			f.write(shell_script)
 
 
 	def submit_job(self, jobid):
