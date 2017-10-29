@@ -6,7 +6,7 @@ setup(
     license="MIT",
     author="Richard J. de Borja",
     author_email="richard.deborja@uhnresearch.ca",
-    description="A wrapper for grid engines used in HPCs",
+    description="A wrapper for grid engines used in High Performance Clusters",
     packages="Hpc"
     )
 
