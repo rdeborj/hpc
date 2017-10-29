@@ -22,7 +22,6 @@ export TMPDIR={{ tmpdir }}
 cd {{ working_directory }}
 
 {{ command }}
-#<: $command | mark_raw :>
 
 echo EXIT STATUS $?
 
