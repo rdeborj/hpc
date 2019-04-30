@@ -7,7 +7,7 @@ import sys
 from subprocess import call
 from jinja2 import Environment, FileSystemLoader
 
-class Sge:
+class Sge(object):
     """
     NAME
         Sge -- A SGE class for parallel job submission
@@ -58,7 +58,7 @@ class Sge:
 
         ARGUMENTS:
             * template_filename: name of the template BASH shell file to use (required)
-            
+
             * context: a dictionary containing attributes and their values for use
                 with SGE (required)
 
@@ -114,15 +114,53 @@ class Sge:
         RETURNS
             Returns a dictionary containing attributes including: jobid
         """
-
         command = " ".join(["qsub", script])
         print("Command is: ", command)
 
         try:
             return_code = call(command, shell=True)
             if return_code != 0:
-                print("Job submission terminated by signal", -return_code, file=sys.stderr)
+                print("Job submission terminated by signal",
+                      -return_code,
+                      file=sys.stderr)
             else:
                 print("Job submission returned", return_code, file=sys.stderr)
         except OSError as job_error:
             print("Execution failed:", job_error, file=sys.stderr)
+
+    def create_hold_job_string(self, jobs):
+        """
+        Create the hold_jid string used in job dependencies for SGE.
+
+        USAGE:
+            <object>.create_hold_jid_string(list_of_jobs)
+
+        ARGUMENTS:
+            * list_of_jobs: a list of jobs to convert to a string formmatted
+              for the hold_jid parameter in SGE
+
+        RETURNS:
+            Retuns a string containing a comma-separated list of dependent jobs
+        """
+        return ",".join(jobs)
+
+    def get_jobid_from_submission(self, sge_output, sge_output_jobid_index=2):
+        """
+        When a job is submitted to SGE, the returned output to STDOUT includes
+        the job ID.  This can be used to generate a dependency list of for
+        inventory purposes when tracking jobs.
+
+        USAGE:
+            <object>.get_jobid_from_submission(sge_output)
+
+        ARGUMENTS:
+            * sge_output: output string from SGE when job is submitted
+                  (rquired)
+            * sge_output_jobid_index: SGE job ID 0-based array location
+                  from SGE submission output (default: 2)
+
+        RETURNS:
+            Returns a dictionary containing the extracted job ID from the
+            input string: {'jobid':<jobid>}
+        """
+        return sge_output.split()[sge_output_jobid_index]

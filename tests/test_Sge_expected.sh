@@ -11,7 +11,7 @@
 #$ -l h_vmem=8g
 #$ -b n
 #$ -sync n
-#$ -q <: $queue :>
+#$ -q all.q
 
 
 

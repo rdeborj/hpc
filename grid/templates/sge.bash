@@ -11,7 +11,7 @@
 #$ -l h_vmem={{ memory }}g
 #$ -b {{ type }}
 #$ -sync {{ sync }}
-#$ -q <: $queue :>
+#$ -q {{ queue }}
 
 {{ hold_for }}
 
@@ -20,3 +20,4 @@
 echo EXIT STATUS $?
 
 echo Job ${JOB_ID} -- ${JOB_NAME} Complete!
+
